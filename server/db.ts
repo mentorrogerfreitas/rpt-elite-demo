@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, games, rtpHistory, alerts, userPreferences } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,70 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+/**
+ * Get all games with current RTP
+ */
+export async function getAllGames() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(games).orderBy(games.name);
+}
+
+/**
+ * Get a single game by ID
+ */
+export async function getGameById(gameId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(games).where(eq(games.id, gameId)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+/**
+ * Get RTP history for a game (last N records)
+ */
+export async function getRtpHistory(gameId: number, limit: number = 24) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(rtpHistory)
+    .where(eq(rtpHistory.gameId, gameId))
+    .orderBy(desc(rtpHistory.timestamp))
+    .limit(limit);
+}
+
+/**
+ * Get user alerts
+ */
+export async function getUserAlerts(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(alerts)
+    .where(eq(alerts.userId, userId))
+    .orderBy(desc(alerts.createdAt));
+}
+
+/**
+ * Get or create user preferences
+ */
+export async function getUserPreferences(userId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(userPreferences)
+    .where(eq(userPreferences.userId, userId))
+    .limit(1);
+  
+  if (result.length > 0) {
+    return result[0];
+  }
+  
+  // Create default preferences
+  await db.insert(userPreferences).values({
+    userId,
+    theme: 'dark',
+    emailNotifications: 1,
+    pushNotifications: 1,
+    updateFrequency: 'realtime',
+  });
+  
+  return getUserPreferences(userId);
+}
