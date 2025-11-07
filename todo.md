@@ -23,18 +23,21 @@
 - [x] Build do projeto completo
 
 ## Fase 4: Deploy da Live Demo
-- [ ] Deploy backend em Railway
-- [ ] Deploy frontend em Vercel
-- [ ] Configurar variáveis de ambiente
+- [x] Criar documentação de deployment
+- [x] Configurar Vercel
+- [x] Configurar Railway
+- [ ] Fazer push para GitHub
+- [ ] Deploy em Vercel
+- [ ] Deploy em Railway
+- [ ] Configurar domínio customizado
 - [ ] Testar fluxo completo online
-- [ ] Criar conta de demonstração
 
 ## Fase 5: Materiais de Venda
-- [ ] Criar anúncio para Flippa
-- [ ] Criar anúncio para Acquire.com
-- [ ] Criar anúncio para AppSumo
-- [ ] Preparar documento de mitigação de riscos
-- [ ] Preparar FAQ para compradores
+- [x] Criar anúncio para Flippa
+- [x] Criar anúncio para Acquire.com
+- [x] Criar anúncio para AppSumo
+- [x] Criar mensagens de prospecção
+- [x] Preparar FAQ e tratamento de objeções
 
 ## Fase 6: Prospecção e Venda
 - [ ] Listar em Flippa
