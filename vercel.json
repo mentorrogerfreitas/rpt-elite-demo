@@ -1,17 +1,14 @@
 {
   "buildCommand": "pnpm build",
   "outputDirectory": "dist",
+  "framework": "vite",
   "env": {
     "NODE_ENV": "production"
   },
-  "rewrites": [
-    {
-      "source": "/api/trpc/:path*",
-      "destination": "/api/trpc/:path*"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/index.html"
+  "functions": {
+    "api/**/*.ts": {
+      "memory": 1024,
+      "maxDuration": 60
     }
-  ]
+  }
 }
